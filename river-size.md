@@ -131,11 +131,11 @@ function riverSizes(matrix) {
 
 function visitRiver(matrix, i, j) {
 	//Base Case:
-    //Validate the i and j inputs first, then check if the node value is 0
-    if (i >= matrix.length || j >= matrix[0].length || i < 0 || j < 0 || !matrix[i][j]) return 0;
+	//Validate the i and j inputs first, then check if the node value is 0
+	if (i >= matrix.length || j >= matrix[0].length || i < 0 || j < 0 || !matrix[i][j]) return 0;
 
 	//Recursive Case:
-    //Mutate the current matrix element to a 0 to indicate it has been visisted
+	//Mutate the current matrix element to a 0 to indicate it has been visisted
 	matrix[i][j] = 0;
 	//Recurse to the 4 directions around you & return the final size
 	return 1 + visitRiver(matrix,i+1,j) + visitRiver(matrix,i-1,j) + visitRiver(matrix,i,j+1) + visitRiver(matrix,i,j-1);
