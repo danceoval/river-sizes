@@ -38,7 +38,7 @@ riverSizes(matrix)  //should return [1, 2, 2, 2, 5]
 ### Solution 1
 
 **Strategy:**
-Create an auxiliary data structure to keep track of which nodes in the matrix have already been visited. Then traverse through each element in the matrix. If the node has been visited before or is a land (`0`) element, move on. If the node is part of a river (`1`) then recurse through that nodes neighbors to determine the river's size, updating the auxiliary matrix as each node is visited.
+Create an auxiliary data structure to keep track of which nodes in the matrix have already been visited. Then traverse through each element in the matrix. If the node has been visited before, move on. Otherwise iterate through that node and its neighbors to determine the river's size, updating the auxiliary matrix as each node is visited.
 
 **Time Complexity:**
 O(wh) where `w` is width and and `h` is height of the matrix. We visit every node once as we iterate through the array, which gives us O(w*h). We have the possibility of visiting each node up to four additional times. This is due to the fact that at every node, we might need to check the four surrounding nodes to see if they might be part of a river. But note, checking a node is a constant time operation and we perform it at most four times. So time complexity is still O(wh).
@@ -58,8 +58,6 @@ function riverSizes(matrix) {
 		for (let j = 0; j < matrix[0].length; j++) {
 			//If we have looked at this node before, skip it
 			if (visited[i][j]) continue;
-			//If the node has a value of 0, skip it
-			if (!matrix[i][j]) continue;
 			//If the node has a value of 1 and has never been visited, investigate it
 			visitRiver(matrix, i, j, visitedNodes, sizes);
 		}
