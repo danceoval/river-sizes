@@ -28,17 +28,19 @@ riverSizes(matrix)  //should return [1, 2, 2, 2, 5]
 ```
 ## Interviewer Strategy Guide
 
-- If the interviewee suggests traversing the array and counting the `1`s, note that they will need a method to keep track of which `1`s belong to which river
 - It may help the interviewee to think of the matrix as a graph, where each node in the matrix has 4 neighboring nodes - up, down, left, right- that may be part of the same river
-- Prompt the interviewee to think about how they might count all the adjacent `1`s to a given node. How can they repeat this process to count all the `1`s in a single river?
+- Prompt the interviewee to think about how they might count all the adjacent `1`s to a given node. How can they repeat this process to count all the `1`s in a single river? This can be done recursively or using a stack.
+- Make sure that the interview has some type of validation to make sure that i and j are valid inputs as they make recursive calls or add nodes to their stack
 - If the interviewer has not yet considered a way to keep track of what nodes they have already visited, remind them that this is likely necessary to avoid repeat visits to a node
+
+Note: The recusive solution shown mutates the input array and the iterative approach shown does not. This is to demonstrate different approaches to the problem. An interviewee's solution can be any combination of impure/pure and recursive/iterative.
 
 ## Solutions
 
-### Solution 1
+### Solution 1: Iterative
 
 **Strategy:**
-Create an auxiliary data structure to keep track of which nodes in the matrix have already been visited. Then traverse through each element in the matrix. If the node has been visited before, move on. Otherwise iterate through that node and its neighbors to determine the river's size, updating the auxiliary matrix as each node is visited.
+Create an auxiliary data structure to keep track of which nodes in the matrix have already been visited. Then traverse through each element in the matrix. If the node has been visited before, move on. Otherwise visit the node and if it is a river, add its unvisited neighbors to a stack. Proceed through the stack iteratively and update the auxiliary matrix as each node is visited.
 
 **Time Complexity:**
 O(wh) where `w` is width and and `h` is height of the matrix. We visit every node once as we iterate through the array, which gives us O(w*h). We have the possibility of visiting each node up to four additional times. This is due to the fact that at every node, we might need to check the four surrounding nodes to see if they might be part of a river. But note, checking a node is a constant time operation and we perform it at most four times. So time complexity is still O(wh).
@@ -84,7 +86,7 @@ function visitRiver(matrix, i, j, visitedNodes, sizes) {
 		if (matrix[i][j] === 0) continue;
 		currentRiverSize++;
 
-		//Add unvisited neighbors to the queue
+		//Add unvisited neighbors to the stack
 		getUnvisitedNeighbors(matrix, i, j, visited, nodesToExplore)
 	}
 	sizes.push(currentRiverSize);
@@ -100,12 +102,10 @@ function getUnvisitedNeighbors(matrix, i, j, visited, nodesToExplore) {
 
 ```
 
-
-### Solution 2
+### Solution 2: Recursive
 
 **Strategy:**
-This solution follows the same overall structure as Solution 1: Traverse through each element in the matrix. If a node is part of a river (`1`) then recurse through that nodes neighbors to determine the river's size. The difference is that in Solution 2, an auxiliary structure is not used to keep track of visited nodes. Instead, the input matrix itself is mutated. A `0` now indicates either a land element, or a node that has been previously visited. A `1` indicates an unvisited river node. This solution is impure but has a simpler implementation.
-
+Traverse through each element in the matrix. If a node is land (`0`), skip it. If a node is part of a river (`1`) then recurse through that nodes neighbors to determine the river's size. An auxiliary structure is not used to keep track of visited nodes for this solution. Instead, the input matrix itself is mutated. A `0` now indicates either a land element or a node that has been previously visited. A `1` indicates an unvisited river node.
 
 **Time Complexity:**
 O(wh) where `w` is width and and `h` is height of the matrix. This is due to the same reasons cited in Solution 1.
